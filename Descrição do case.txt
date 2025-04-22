@@ -1,0 +1,49 @@
+🧠 O software
+
+O código exemplifica um software simples de geração, envio e consulta de pedidos.
+Ao enviar um novo pedido, o sistema deve enviá-lo para uma fila e salvá-lo.
+O pedido somente é válido se possuir valor positivo e algum cliente estiver associado.
+Caso contrário, o sistema não deve completar a solicitação de criação e envio do pedido.
+Erros devem ser retornados quando alguma ação não for possível e o usuário deve ser capaz de reenviar o pedido corretamente, sem duplicação no banco.
+
+
+
+✅ O que você deve fazer
+
+Sua missão é corrigir 3 bugs presentes no sistema. Eles afetam o correto funcionamento do cadastro e/ou envio de pedidos
+⚠️ Atenção: o código pode conter alguns trechos confusos, repetitivos ou mal estruturados propositalmente, simulando um sistema legado
+
+
+
+🐞 Bugs existentes
+
+1. O sistema está permitindo o cadastro de pedidos com valor total negativo
+
+2. O sistema não está enviando mensagens corretamente para a fila em algumas situações. O padrão ainda não foi identificado
+
+3. O sistema às vezes retorna o pedido incorreto quando consultamos por id ou até mesmo quando acabamos de enviar um pedido. Corrija o que causa o erro e dê uma solução para pedidos que já estão retornando incorretamente, se possível
+
+Extra: Existe um erro na regra de negócio no método de processamento do pedido. Identifique e corrija esse erro da regra de negócio
+
+
+
+💡 Critérios de avaliação
+
+Capacidade de leitura e interpretação de código legado
+
+Organização e clareza na correção dos problemas
+
+Boas práticas de programação orientada a objetos
+
+Clareza nos comentários ou explicações (se houver)
+
+Você pode sugerir melhorias e outras correções não inclusas nos bugs mencionados, mas a parte principal é que os bugs estejam corrigidos
+
+Sugestões podem ser feitas sem estarem, necessariamente, implementadas no código. Sugiro que esses casos sejam indicados como "Sem implementação de código"
+
+
+
+🚀 Entrega
+
+Escreva um pequeno README com as correções realizadas e onde estavam os problemas e quais correções foram feitas
+Envie o projeto corrigido em uma pasta .zip junto com o README e qualquer outro material que considere relevante

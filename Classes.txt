@@ -1,0 +1,109 @@
+public class Pedido {
+    private String id;
+    private String cliente;
+    private double valorTotal;
+
+    public Pedido(String id, String cliente, double valorTotal) {
+        this.id = id;
+        this.cliente = cliente;
+        this.valorTotal = valorTotal;
+    }
+
+    public Pedido(String id) {
+	this.id = id;
+    }
+
+    public String getId() { return id; }
+    public String getCliente() { return cliente; }
+    public double getValorTotal() { return valorTotal; }
+
+    public void setId(String id) { this.id = id; }
+    public void setCliente(String cliente) { this.cliente = cliente; }
+    public void setValorTotal(double valorTotal) { this.valorTotal = valorTotal; }
+}
+
+
+
+Exemplo de pedido que está sendo enviado para o método criarPedido:
+{
+	"id": "id123",
+	"cliente": "Marquinhos",
+	"valorTotal": 500.00
+}
+
+
+
+@RestController
+@RequestMapping("/pedidos")
+public class PedidoController {
+
+    @Autowired
+    private PedidoService pedidoService;
+
+    @PostMapping
+    public Object criarPedido(@RequestBody Pedido pedido) {
+        try {
+            pedidoService.processarPedido(pedido);
+	    Pedido pedido = pedidoService.consultar(pedido.getId());
+            return pedido;
+        } catch (Exception e) {
+            return "Erro ao criar pedido: " + e.getMessage();
+        }
+	return null;
+    }
+}
+
+
+
+@Service
+public class PedidoService {
+
+    private PedidoRepository pedidoRepository;
+    private PedidoPublisher pedidoPublisher;
+
+    public void processarPedido(Pedido pedido) throws Exception {
+        if (pedido.getValorTotal() < 0) {
+            System.out.println("Valor negativo...");
+        }
+
+        pedidoRepository.salvar(pedido);
+        pedidoPublisher.enviarPedido(pedido);
+    }
+}
+
+
+@Repository
+public class PedidoRepository {
+	
+    private PedidoService pedidoService;
+
+    public void salvar(Pedido pedido) {
+        System.out.println("Salvando novo pedido: " + pedido.getId());
+	// Pedido sendo salvo
+    }
+
+    public Pedido consultar(String idPedido) {
+	Pedido pedido = new Pedido(pedidoId);
+        System.out.println("Consultando pedido: " + pedido.getId());
+	// Pedido sendo consultado
+	return pedido;
+    }
+}
+
+
+
+@Component
+public class PedidoPublisher {
+
+    public void enviarPedido(Pedido pedido) throws Exception {
+        if (pedido.getCliente() != null) {
+            System.out.println("Enviando pedido para a fila: " + pedido.getId());
+	    // Pedido sendo enviado
+
+	    System.out.println("Salvando novo pedido: " + pedido.getId());
+	    // Pedido sendo salvo
+        }
+    }
+}
+
+
