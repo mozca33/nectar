@@ -1,6 +1,6 @@
 # 💻 Sistema de Processamento de Pedidos
 
-Este projeto é parte de um case técnico cujo objetivo é corrigir bugs em um sistema legado de geração, envio e consulta de pedidos.
+Este projeto faz parte de um case técnico com o objetivo de identificar e corrigir bugs em um sistema legado de geração, envio e consulta de pedidos.
 O foco está em compreender, corrigir e melhorar a estrutura existente, respeitando as regras de negócio propostas.
 
 # ⚙️ Ambiente de desenvolvimento utilizado
@@ -16,7 +16,12 @@ O foco está em compreender, corrigir e melhorar a estrutura existente, respeita
 1. Extraia o arquivo `.zip` ou clone o repositório.
 2. Importe o projeto em sua IDE de preferência (IntelliJ, Eclipse ou VS Code).
 3. Certifique-se de que o ambiente está corretamente configurado dependendo da IDE escolhida.
-4. Execute a aplicação com o Spring Boot.
+4. Execute a aplicação usando sua IDE ou via terminal com o comando:
+
+```bash
+mvn spring-boot:run
+```
+
 5. Utilize uma ferramenta como o Postman para testes.
 
 ---
@@ -29,7 +34,7 @@ Problema:
 O sistema permite o cadastro de pedidos com valor total negativo ou nulo por conta de uma falha lógica na verificação do valor do pedido na classe **PedidoService.java**. Se o `valorTotal` for menor que zero o sistema imprime **"Valor negativo..."** e segue com a persistência e envio do pedido.
 
 Correção:
-Foi adicionado a validação `@Positive` do jakarta.validation.constraints.Positive na classe **Pedido.java**, garantindo que o valor total seja positivo antes de o pedido ser processado. Isso impede a criação de pedidos com valores negativos.
+Foi adicionada a validação `@Positive` da anotação jakarta.validation.constraints.Positive na classe **Pedido.java**, garantindo que o valor total seja positivo antes de o pedido ser processado. Isso impede a criação de pedidos com valores negativos.
 
 ---
 
@@ -40,7 +45,7 @@ O sistema não está enviando mensagens corretamente para a fila em algumas situ
 `Enviando para a fila: `
 
 Correção:
-Foi adicionado a validação `@NotBlank` do jakarta.validation.constraints.Positive na classe **Pedido.java** para garantir que o campo `Id` não seja nulo ou vazio, evitando o envio incorreto para a fila.
+Foi adicionada a validação `@NotBlank` da anotação jakarta.validation.constraints.NotBlank no campo `Id` da classe **Pedido.java**, garantindo que o pedido não seja enviado à fila sem um indentificador válido.
 
 ---
 
@@ -50,7 +55,7 @@ Problema:
 O sistema não retorna corretamente o pedido quando consultado pelo ID. Isso ocorre devido à implementação na classe **PedidoRepository.java** que para cada consulta está sendo instanciado um novo pedido usando o Id passado como parâmetro. Vale ressaltar que também há a falta da implementação do método `consultar` da classe **PedidoService.java**.
 
 Correção:
-Foi removida a instânciação de um novo pedido utilizando o `idPedido`.
+Foi removida a instanciação de um novo pedido utilizando o `idPedido`.
 Foi implementado também um mecanismo simulado de armazenamento com Map<String, Pedido> para persistência temporária dos pedidos enquanto a aplicação estiver em execução.
 O método consultar agora retorna o pedido real armazenado.
 
@@ -78,7 +83,6 @@ Foram feitas validações completas utilizando `@NotBlank` e `@Positive` garanti
    Foram aplicadas as anotações de validação do Jakarta Validation, como `@NotBlank` e `@Positive`, para garantir que os campos obrigatórios não sejam nulos ou vazios, e o `valorTotal` do pedido seja positivo.
 6. Criação da classe **GlobalExceptionHandler.java**:
    Foi criada uma tratativa de exceções com a anotação `@RestControllerAdvice` para poder capturar e tratar exceções de forma global, centralizada e customizada, retornando respostas adequadas para cada exceção.
-7. Criação
 
 # 📗 Melhorias Sugeridas (Não implementadas)
 
@@ -87,11 +91,10 @@ Foram feitas validações completas utilizando `@NotBlank` e `@Positive` garanti
 3. Implementar um [Fluxo CRUD](#fluxo-crud) completo para gerenciamento apropriado de pedidos.
 4. Implementar um campo `status` do pedido para acompanhamento de pedidos `enviados` e `não-enviados`. Poderá servir também como sinalização de pedidos já salvos que estão inconsistentes, para que sejam corrigidos manualmente ou tratados de maneira diferente durante a consulta e outras futuras funcionalidades através de um status especial `inconsistente`.
 5. Implementar um processo de migração para corrigir pedidos existentes que possam estar inconsistentes no banco (com `Id`, `cliente` ou `valorTotal` inválidos).
-6.
 
 # 📌 Considerações finais
 
-O sistema foi ajustado para seguir a regra de negócio e garantir integridade nos dados de pedidos. Os principais bugs foram corrigidos com foco em clareza e manutenção. O código foi refatorado de maneira a seguir melhores práticas, com o uso de DTOs, Validações de Campo, e a separação de responsabilidades em cada camada, garantindo que a aplicação seja fácil de entender e de manter no futuro.
+O sistema foi ajustado para seguir corretamente as regras de negócio e garantir a integridade dos dados dos pedidos. Os principais bugs foram corrigidos com foco em clareza e manutenção. O código foi refatorado de maneira a seguir melhores práticas, com o uso de DTOs, Validações de Campo, e a separação de responsabilidades em cada camada, garantindo que a aplicação seja fácil de entender e de manter no futuro.
 
     -> Criação de novas funcionalidades para controle do usuário sobre o sistema no PedidoService.java
 
@@ -109,6 +112,7 @@ O sistema foi ajustado para seguir a regra de negócio e garantir integridade no
 
 ### Implementação no PedidoController.java
 
+```bash
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removerPedido(@PathVariable("id") String idPedido) {
         service.remover(idPedido);
@@ -119,9 +123,11 @@ O sistema foi ajustado para seguir a regra de negócio e garantir integridade no
     public ResponseEntity<PedidoDTO> atualizarPedido(@PathVariable("id") String idPedido, @RequestBody Pedido pedido) {
         return ResponseEntity.ok(service.atualizar(idPedido, pedido));
     }
+```
 
 ### Implementação no PedidoService.java
 
+```bash
     public PedidoDTO atualizar(String idPedido, Pedido pedido) {
         validador.validarPedido(pedido);
         if (!repositorio.existePedidoPorId(idPedido)) {
@@ -152,3 +158,4 @@ O sistema foi ajustado para seguir a regra de negócio e garantir integridade no
 
         repositorio.remover(idPedido);
     }
+```
