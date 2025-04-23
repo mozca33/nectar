@@ -19,17 +19,23 @@ public class PedidoService {
     }
 
     public PedidoDTO criarPedido(Pedido pedido) {
-        verificarPedidoDuplicado(pedido);
+        verificarPedidoJaExistente(pedido.getId());
         repositorio.salvar(pedido);
         publicador.enviarPedido(pedido);
 
         return new PedidoDTO(pedido);
     }
 
-    private void verificarPedidoDuplicado(Pedido pedido) {
-        if (repositorio.existePedidoPorId(pedido.getId())) {
-            throw new IllegalStateException("Pedido já existe com o ID informado.");
-        }
+    public PedidoDTO consultar(String idPedido) {
+        Pedido pedido = repositorio.consultar(idPedido)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado com o ID informado."));
+
+        return new PedidoDTO(pedido);
     }
 
+    private void verificarPedidoJaExistente(String idPedido) {
+        if (repositorio.existePorId(idPedido)) {
+            throw new IllegalArgumentException("Pedido já existe com o ID informado.");
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.rafael.pedido.repository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -16,11 +17,11 @@ public class PedidoRepository {
         banco.put(pedido.getId(), pedido);
     }
 
-    public Pedido consultar(String idPedido) {
-        return banco.get(idPedido);
+    public Optional<Pedido> consultar(String idPedido) {
+        return Optional.ofNullable(banco.get(idPedido));
     }
 
-    public boolean existePedidoPorId(String idPedido) {
+    public boolean existePorId(String idPedido) {
         return banco.containsKey(idPedido);
     }
 }

@@ -34,12 +34,12 @@ class PedidoServiceTest {
     @Test
     void deveCriarPedidoComSucesso() {
         Pedido pedido = new Pedido("1", "Cliente Teste", 100.0);
-        when(repository.existePedidoPorId("1")).thenReturn(false);
+        when(repository.existePorId("1")).thenReturn(false);
 
         PedidoDTO dto = service.criarPedido(pedido);
 
         assertNotNull(dto);
-        assertEquals("Cliente Teste", dto.getCliente());
+        assertEquals("Cliente Teste", dto.cliente());
         verify(repository).salvar(pedido);
         verify(publisher).enviarPedido(pedido);
     }
@@ -47,7 +47,7 @@ class PedidoServiceTest {
     @Test
     void deveLancarExcecaoSePedidoDuplicado() {
         Pedido pedido = new Pedido("1", "Cliente Teste", 100.0);
-        when(repository.existePedidoPorId("1")).thenReturn(true);
+        when(repository.existePorId("1")).thenReturn(true);
 
         assertThrows(IllegalStateException.class, () -> service.criarPedido(pedido));
         verify(repository, never()).salvar(any());
@@ -57,7 +57,7 @@ class PedidoServiceTest {
     @Test
     void deveLancarExcecaoSeClienteInvalido() {
         Pedido pedido = new Pedido("1", "", 100.0);
-        when(repository.existePedidoPorId("1")).thenReturn(false);
+        when(repository.existePorId("1")).thenReturn(false);
 
         assertThrows(MethodArgumentNotValidException.class, () -> service.criarPedido(pedido));
         verify(repository, never()).salvar(any());

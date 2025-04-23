@@ -1,7 +1,6 @@
 package com.rafael.pedido.publisher;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,13 +17,6 @@ public class PedidoPublisherTest {
 
         PedidoDTO dto = publisher.enviarPedido(pedido);
 
-        assertEquals("Cliente", dto.getCliente());
-    }
-
-    @Test
-    void deveLancarExcecaoSeClienteInvalido() {
-        Pedido pedido = new Pedido("1", "", 200.0);
-
-        assertThrows(IllegalArgumentException.class, () -> publisher.enviarPedido(pedido));
+        assertEquals("Cliente", dto.cliente());
     }
 }

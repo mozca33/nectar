@@ -12,6 +12,8 @@ import com.rafael.pedido.model.Pedido;
 import com.rafael.pedido.service.PedidoService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -26,5 +28,10 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<PedidoDTO> criarPedido(@Valid @RequestBody Pedido pedido) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarPedido(pedido));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoDTO> consultarPedido(@PathVariable("id") String idPedido) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.consultar(idPedido));
     }
 }

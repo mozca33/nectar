@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PedidoControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    @MockitoBean
     private PedidoService service;
     private ObjectMapper objectMapper;
 
@@ -39,7 +41,7 @@ public class PedidoControllerTest {
         when(service.criarPedido(any())).thenReturn(pedidoDTO);
 
         mockMvc.perform(post("/pedidos")
-                .content(objectMapper.writeValueAsString(pedidoDTO))
+                .content(objectMapper.writeValueAsString(pedido))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("1"))
@@ -52,10 +54,12 @@ public class PedidoControllerTest {
         Pedido pedido = new Pedido("1", "Cliente", -100.0);
         PedidoDTO pedidoDTO = new PedidoDTO(pedido);
 
+        when(service.criarPedido(any())).thenThrow(new IllegalArgumentException());
+
         mockMvc.perform(post("/pedidos")
                 .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.status").value(500));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
     }
 }

@@ -16,7 +16,7 @@ public class PedidoRepositoryTest {
         Pedido pedido = new Pedido("1", "Cliente", 100.0);
         repository.salvar(pedido);
 
-        assertTrue(repository.existePedidoPorId("1"));
+        assertTrue(repository.existePorId("1"));
         assertEquals(pedido, repository.consultar("1"));
     }
 
