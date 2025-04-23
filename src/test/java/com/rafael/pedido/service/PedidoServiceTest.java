@@ -1,5 +1,66 @@
 package com.rafael.pedido.service;
 
-public class PedidoServiceTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+
+import com.rafael.pedido.dto.PedidoDTO;
+import com.rafael.pedido.model.Pedido;
+import com.rafael.pedido.publisher.PedidoPublisher;
+import com.rafael.pedido.repository.PedidoRepository;
+
+@SpringBootTest
+class PedidoServiceTest {
+
+    @Mock
+    private PedidoRepository repository;
+
+    @Mock
+    private PedidoPublisher publisher;
+
+    @InjectMocks
+    private PedidoService service;
+
+    @Test
+    void deveCriarPedidoComSucesso() {
+        Pedido pedido = new Pedido("1", "Cliente Teste", 100.0);
+        when(repository.existePedidoPorId("1")).thenReturn(false);
+
+        PedidoDTO dto = service.criarPedido(pedido);
+
+        assertNotNull(dto);
+        assertEquals("Cliente Teste", dto.getCliente());
+        verify(repository).salvar(pedido);
+        verify(publisher).enviarPedido(pedido);
+    }
+
+    @Test
+    void deveLancarExcecaoSePedidoDuplicado() {
+        Pedido pedido = new Pedido("1", "Cliente Teste", 100.0);
+        when(repository.existePedidoPorId("1")).thenReturn(true);
+
+        assertThrows(IllegalStateException.class, () -> service.criarPedido(pedido));
+        verify(repository, never()).salvar(any());
+        verify(publisher, never()).enviarPedido(any());
+    }
+
+    @Test
+    void deveLancarExcecaoSeClienteInvalido() {
+        Pedido pedido = new Pedido("1", "", 100.0);
+        when(repository.existePedidoPorId("1")).thenReturn(false);
+
+        assertThrows(MethodArgumentNotValidException.class, () -> service.criarPedido(pedido));
+        verify(repository, never()).salvar(any());
+        verify(publisher, never()).enviarPedido(any());
+    }
 }

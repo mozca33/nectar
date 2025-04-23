@@ -1,9 +1,20 @@
 package com.rafael.pedido.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 public class Pedido {
+    @NotBlank(message = "ID do pedido não pode ser nulo ou vazio.")
     private String id;
+
+    @NotBlank(message = "Cliente não pode ser nulo ou vazio.")
     private String cliente;
+
+    @Positive(message = "Valor total deve ser positivo.")
     private double valorTotal;
+
+    public Pedido() {
+    }
 
     public Pedido(String id, String cliente, double valorTotal) {
         this.id = id;
