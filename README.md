@@ -1,5 +1,5 @@
 # 💻 Sistema de Processamento de Pedidos
-**Descrição**:
+
 Este projeto faz parte de um case técnico com o objetivo de identificar e corrigir bugs em um sistema legado de geração, envio e consulta de pedidos. O foco está em compreender, corrigir e melhorar a estrutura existente, respeitando as regras de negócio definidas.
 
 # ⚙️ Ambiente de Desenvolvimento Utilizado
