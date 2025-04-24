@@ -1,0 +1,9 @@
+# Ignorar arquivos compilados
+*.class
+
+# Ignorar pastas de build
+/bin/
+/target/
+
+# Ignorar arquivos de configuração de IDE
+.vscode/
