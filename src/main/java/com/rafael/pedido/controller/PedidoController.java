@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rafael.pedido.dto.PedidoDTO;
-import com.rafael.pedido.model.Pedido;
 import com.rafael.pedido.service.PedidoService;
 
 import jakarta.validation.Valid;
@@ -44,8 +43,8 @@ public class PedidoController {
      * @return o pedido criado,
      */
     @PostMapping
-    public ResponseEntity<PedidoDTO> criarPedido(@Valid @RequestBody Pedido pedido) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.criarPedido(pedido));
+    public ResponseEntity<PedidoDTO> criarPedido(@Valid @RequestBody PedidoDTO pedidoDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.criarPedido(pedidoDTO));
     }
 
     /**
