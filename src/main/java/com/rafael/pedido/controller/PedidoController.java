@@ -12,6 +12,8 @@ import com.rafael.pedido.model.Pedido;
 import com.rafael.pedido.service.PedidoService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -30,8 +32,8 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarPedido(pedido));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PedidoDTO> consultarPedido(@PathVariable("id") String idPedido) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.consultar(idPedido));
+    @GetMapping("/{idPedido}")
+    public ResponseEntity<PedidoDTO> consultarPedido(@PathVariable @NotBlank String idPedido) {
+        return ResponseEntity.ok(service.consultar(idPedido));
     }
 }

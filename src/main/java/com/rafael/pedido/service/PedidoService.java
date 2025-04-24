@@ -1,5 +1,7 @@
 package com.rafael.pedido.service;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.stereotype.Service;
 
 import com.rafael.pedido.dto.PedidoDTO;
@@ -28,7 +30,7 @@ public class PedidoService {
 
     public PedidoDTO consultar(String idPedido) {
         Pedido pedido = repositorio.consultar(idPedido)
-                .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado com o ID informado."));
+                .orElseThrow(() -> new NoSuchElementException("Pedido não encontrado com o ID informado."));
 
         return new PedidoDTO(pedido);
     }
