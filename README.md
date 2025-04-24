@@ -115,6 +115,8 @@ Foram feitas validações completas utilizando `@NotBlank` e `@Positive` garanti
 
 5. Implementar um processo de migração para corrigir pedidos existentes que possam estar inconsistentes no banco (com Id, cliente ou valorTotal inválidos).
 
+6. Adicionar a anotação `@Entity` na classe `Pedido.java` quando a conexão com o banco de dados real for implementada, a fim de mapear a classe como uma entidade JPA, representando a tabela correspondente no banco de dados e permitindo a persistência dos dados.
+
 ## 📌 Considerações finais
 
 O sistema foi ajustado para seguir a regra de negócio e garantir integridade nos dados de pedidos. Os principais bugs foram corrigidos com foco em clareza e manutenção. O código foi refatorado de maneira a seguir melhores práticas, com o uso de DTOs, Validações de Campo, e a separação de responsabilidades em cada camada, garantindo que a aplicação seja fácil de entender e de manter no futuro.
