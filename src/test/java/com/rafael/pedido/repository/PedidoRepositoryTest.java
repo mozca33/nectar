@@ -8,6 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import com.rafael.pedido.model.Pedido;
 
+/**
+ * Classe de teste para o PedidoRepository.
+ * Esta classe contém testes unitários para verificar o funcionamento do
+ * PedidoRepository.
+ */
 public class PedidoRepositoryTest {
     private PedidoRepository repository = new PedidoRepository();
 
@@ -20,6 +25,10 @@ public class PedidoRepositoryTest {
         assertEquals(pedido, repository.consultar("1"));
     }
 
+    /**
+     * Testa o método existePorId do PedidoRepository.
+     * Verifica se retorna false quando o pedido não existe.
+     */
     @Test
     void deveRetornarNuloSePedidoNaoExiste() {
         assertNull(repository.consultar("nao-existe"));

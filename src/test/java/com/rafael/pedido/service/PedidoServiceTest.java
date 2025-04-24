@@ -19,6 +19,11 @@ import com.rafael.pedido.model.Pedido;
 import com.rafael.pedido.publisher.PedidoPublisher;
 import com.rafael.pedido.repository.PedidoRepository;
 
+/**
+ * Classe de teste para o serviço de pedidos.
+ * Esta classe contém testes unitários para verificar o funcionamento do
+ * PedidoService.
+ */
 @SpringBootTest
 class PedidoServiceTest {
 
@@ -31,6 +36,11 @@ class PedidoServiceTest {
     @InjectMocks
     private PedidoService service;
 
+    /**
+     * Testa o método criarPedido do PedidoService.
+     * Verifica se o pedido é criado corretamente quando os dados são válidos.
+     * Verifica se lança exceção quando o pedido já existe.
+     */
     @Test
     void deveCriarPedidoComSucesso() {
         Pedido pedido = new Pedido("1", "Cliente Teste", 100.0);

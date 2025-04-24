@@ -11,9 +11,19 @@ import com.rafael.pedido.dto.ErroDTO;
 
 import java.util.NoSuchElementException;
 
+/**
+ * Classe responsável por tratar as exceções lançadas na aplicação de forma
+ * global.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Método que trata exceções de argumento ilegal.
+     *
+     * @param ex a exceção lançada
+     * @return Resposta com o status 400 e a mensagem de erro
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErroDTO> tratarExcecaoDeArgumentoIlegal(IllegalArgumentException ex) {
         return ResponseEntity
@@ -21,6 +31,12 @@ public class GlobalExceptionHandler {
                 .body(ErroDTO.fromException(ex, HttpStatus.BAD_REQUEST.value()));
     }
 
+    /**
+     * Método que trata exceções de estado ilegal.
+     *
+     * @param ex a exceção lançada
+     * @return Resposta com o status 400 e a mensagem de erro
+     */
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErroDTO> tratarExcecaoDeEstadoIlegal(IllegalStateException ex) {
         return ResponseEntity
@@ -28,8 +44,14 @@ public class GlobalExceptionHandler {
                 .body(ErroDTO.fromException(ex, HttpStatus.BAD_REQUEST.value()));
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ErroDTO> tratarExcecaoDeElementoNaoEncontrado(NoSuchElementException ex) {
+    /**
+     * Método que trata exceções de validação de método.
+     *
+     * @param ex a exceção lançada
+     * @return Resposta com o status 400 e a mensagem de erro
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> tratarExcecaoDeValidacaoDeMetodo(MethodArgumentNotValidException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErroDTO.fromException(ex, HttpStatus.NOT_FOUND.value()));
@@ -42,20 +64,38 @@ public class GlobalExceptionHandler {
                 .body(ErroDTO.fromException(ex, HttpStatus.BAD_REQUEST.value()));
     }
 
-    @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ErroDTO> tratarExcecaoDeRecursoNaoEncontrado(NoResourceFoundException ex) {
+    /**
+     * Método que trata exceções de elemento não encontrado.
+     *
+     * @param ex a exceção lançada
+     * @return Resposta com o status 404 e a mensagem de erro
+     */
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ErrorResponse> tratarExcecaoDeElementoNaoEncontrado(NoSuchElementException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErroDTO.fromException(ex, HttpStatus.NOT_FOUND.value()));
     }
 
-    @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity<ErroDTO> tratarExcecaoDeValidacaoDeHandler(HandlerMethodValidationException ex) {
+    /**
+     * Método que trata exceções de recurso não encontrado.
+     *
+     * @param ex a exceção lançada
+     * @return Resposta com o status 404 e a mensagem de erro
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> tratarExcecaoDeRecursoNaoEncontrado(NoResourceFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErroDTO.fromException(ex, HttpStatus.BAD_REQUEST.value()));
     }
 
+    /**
+     * Método que trata exceções genéricas.
+     *
+     * @param ex a exceção lançada
+     * @return Resposta com o status 500 e a mensagem de erro
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErroDTO> tratarExcecaoGenerica(Exception ex) {
         return ResponseEntity

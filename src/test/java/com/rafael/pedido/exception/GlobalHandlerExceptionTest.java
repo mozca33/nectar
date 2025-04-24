@@ -29,6 +29,11 @@ public class GlobalHandlerExceptionTest {
         objectMapper = new ObjectMapper();
     }
 
+    /**
+     * Testa o tratamento de exceções de validação de método.
+     * Verifica se o status da resposta é 400 Bad Request e se a mensagem de erro
+     * está correta.
+     */
     @Test
     void deveRetornarBadRequestParaIllegalArgument() throws Exception {
         Pedido pedido = new Pedido();

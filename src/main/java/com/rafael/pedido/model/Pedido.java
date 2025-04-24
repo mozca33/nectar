@@ -1,8 +1,12 @@
 package com.rafael.pedido.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-
+/**
+ * Representa um pedido no sistema.
+ * Contém as informações do pedido, como o valor total, status e dados do
+ * cliente.
+ * A classe também valida a consistência dos dados antes de permitir que o
+ * pedido seja criado.
+ */
 public class Pedido {
     @NotBlank(message = "ID do pedido não pode ser nulo ou vazio.")
     private String id;
@@ -16,12 +20,24 @@ public class Pedido {
     public Pedido() {
     }
 
+    /**
+     * Construtor para inicializar um pedido com os dados fornecidos.
+     * 
+     * @param id         O identificador do pedido.
+     * @param cliente    O nome do cliente associado ao pedido.
+     * @param valorTotal O valor total do pedido.
+     */
     public Pedido(String id, String cliente, double valorTotal) {
         this.id = id;
         this.cliente = cliente;
         this.valorTotal = valorTotal;
     }
 
+    /**
+     * Construtor para inicializar um pedido com apenas o ID.
+     * 
+     * @param id O identificador do pedido.
+     */
     public Pedido(String id) {
         this.id = id;
     }

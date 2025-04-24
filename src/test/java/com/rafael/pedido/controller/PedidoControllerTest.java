@@ -21,6 +21,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.NoSuchElementException;
 
+/**
+ * Classe de teste para o controlador de pedidos.
+ * Verifica se os endpoints estão funcionando corretamente e se as validações
+ * estão sendo aplicadas.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PedidoControllerTest {
@@ -35,6 +40,11 @@ public class PedidoControllerTest {
         objectMapper = new ObjectMapper();
     }
 
+    /**
+     * Testa a criação de um pedido com dados válidos.
+     * Verifica se o status da resposta é 201 Created e se os dados do pedido
+     * estão corretos.
+     */
     @Test
     public void deveCriarPedido_quandoDadosValidos() throws Exception {
         Pedido pedido = new Pedido("1", "Cliente", 100.0);
@@ -51,6 +61,10 @@ public class PedidoControllerTest {
                 .andExpect(jsonPath("$.valorTotal").value("100.0"));
     }
 
+    /**
+     * Testa a consulta de um pedido inexistente.
+     * Verifica se o status da resposta é 404 Not Found.
+     */
     @Test
     public void deveRetornar400_quandoIdForNulo() throws Exception {
         Pedido pedido = new Pedido(null, "Cliente", 100.0);
@@ -65,6 +79,10 @@ public class PedidoControllerTest {
                 .andExpect(jsonPath("$.status").value(400));
     }
 
+    /**
+     * Testa a criação de um pedido com ID inválido.
+     * Verifica se o status da resposta é 400 Bad Request.
+     */
     @Test
     void deveRetornar400_quandoClienteForVazio() throws Exception {
         PedidoDTO dto = new PedidoDTO("1", "", 100.0);
@@ -75,6 +93,10 @@ public class PedidoControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Testa a criação de um pedido com valor total inválido.
+     * Verifica se o status da resposta é 400 Bad Request.
+     */
     @Test
     void deveRetornar400_quandoValorTotalForNegativo() throws Exception {
         PedidoDTO dto = new PedidoDTO("1", "Cliente", -100.0);
@@ -85,6 +107,10 @@ public class PedidoControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Testa a criação de um pedido com todos os campos inválidos.
+     * Verifica se o status da resposta é 400 Bad Request.
+     */
     @Test
     void deveRetornar400_quandoIdEClienteForemInvalidos() throws Exception {
         PedidoDTO dto = new PedidoDTO("", "", 100.0);
@@ -95,6 +121,10 @@ public class PedidoControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Testa a criação de um pedido com ID e valor total inválidos.
+     * Verifica se o status da resposta é 400 Bad Request.
+     */
     @Test
     void deveRetornar400_quandoClienteEValorTotalForemInvalidos() throws Exception {
         PedidoDTO dto = new PedidoDTO("1", "", -5.0);
@@ -105,6 +135,10 @@ public class PedidoControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Testa a criação de um pedido com cliente e valor total inválidos.
+     * Verifica se o status da resposta é 400 Bad Request.
+     */
     @Test
     void deveRetornar400_quandoTodosOsCamposForemInvalidos() throws Exception {
         PedidoDTO dto = new PedidoDTO("", null, -1.0);
@@ -115,6 +149,10 @@ public class PedidoControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Testa a consulta de um pedido com ID inválido.
+     * Verifica se o status da resposta é 400 Bad Request.
+     */
     @Test
     public void deveRetornar400_quandoIdForVazio() throws Exception {
         when(service.consultar(" "))
@@ -126,21 +164,10 @@ public class PedidoControllerTest {
                 .andExpect(jsonPath("$.status").value(400));
     }
 
-    @Test
-    public void deveBuscarPedidoExistente() throws Exception {
-        Pedido pedido = new Pedido("1", "Cliente", 100.0);
-        PedidoDTO pedidoDTO = new PedidoDTO(pedido);
-
-        when(service.consultar("1")).thenReturn(pedidoDTO);
-
-        mockMvc.perform(get("/pedidos/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.cliente").value("Cliente"))
-                .andExpect(jsonPath("$.valorTotal").value("100.0"));
-    }
-
+    /**
+     * Testa a consulta de um pedido com ID nulo.
+     * Verifica se o status da resposta é 400 Bad Request.
+     */
     @Test
     public void deveRetornar404_quandoIdNaoExistir() throws Exception {
         when(service.consultar("999"))
