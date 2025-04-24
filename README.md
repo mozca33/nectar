@@ -78,7 +78,7 @@ private final Map<String, Pedido> banco = new HashMap<>();
 ### Bug 4 - Violação da Regra de Negócio
 
 **Problema**:
-A lógica de processamento não valida corretamente se o pedido é válido, isto é, se os campos id, cliente e valorTotal estão corretamente preenchidos.
+A lógica de processamento não valida corretamente o pedido, isto é, se os campos id, cliente e valorTotal estão corretamente preenchidos.
 
 **Correção**:
 Foram feitas validações completas utilizando `@NotBlank` e `@Positive` garantindo que apenas pedidos válidos sejam processados. Agora, o sistema rejeita pedidos com os campos id, cliente nulos ou vazios e valorTotal negativo ou zerado.
