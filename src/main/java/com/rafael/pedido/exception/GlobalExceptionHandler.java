@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import com.rafael.pedido.dto.ErroDTO;
-
 import java.util.NoSuchElementException;
 
 /**
@@ -25,10 +23,10 @@ public class GlobalExceptionHandler {
      * @return Resposta com o status 400 e a mensagem de erro
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErroDTO> tratarExcecaoDeArgumentoIlegal(IllegalArgumentException ex) {
+    public ResponseEntity<ErrorResponse> tratarExcecaoDeArgumentoIlegal(IllegalArgumentException ex) {
         return ResponseEntity
-                .badRequest()
-                .body(ErroDTO.fromException(ex, HttpStatus.BAD_REQUEST.value()));
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.fromException(ex, HttpStatus.BAD_REQUEST.value()));
     }
 
     /**
@@ -38,10 +36,10 @@ public class GlobalExceptionHandler {
      * @return Resposta com o status 400 e a mensagem de erro
      */
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ErroDTO> tratarExcecaoDeEstadoIlegal(IllegalStateException ex) {
+    public ResponseEntity<ErrorResponse> tratarExcecaoDeEstadoIlegal(IllegalStateException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ErroDTO.fromException(ex, HttpStatus.BAD_REQUEST.value()));
+                .body(ErrorResponse.fromException(ex, HttpStatus.BAD_REQUEST.value()));
     }
 
     /**
@@ -53,15 +51,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> tratarExcecaoDeValidacaoDeMetodo(MethodArgumentNotValidException ex) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ErroDTO.fromException(ex, HttpStatus.NOT_FOUND.value()));
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.fromException(ex, HttpStatus.BAD_REQUEST.value()));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErroDTO> tratarExcecaoDeValidacaoDeMetodo(MethodArgumentNotValidException ex) {
+    /**
+     * Método que trata exceções de validação de handler.
+     *
+     * @param ex a exceção lançada
+     * @return Resposta com o status 400 e a mensagem de erro
+     */
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ErrorResponse> tratarExcecaoDeValidacaoDeHandler(HandlerMethodValidationException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ErroDTO.fromException(ex, HttpStatus.BAD_REQUEST.value()));
+                .body(ErrorResponse.fromException(ex, HttpStatus.BAD_REQUEST.value()));
     }
 
     /**
@@ -74,7 +78,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> tratarExcecaoDeElementoNaoEncontrado(NoSuchElementException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(ErroDTO.fromException(ex, HttpStatus.NOT_FOUND.value()));
+                .body(ErrorResponse.fromException(ex, HttpStatus.NOT_FOUND.value()));
     }
 
     /**
@@ -86,8 +90,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> tratarExcecaoDeRecursoNaoEncontrado(NoResourceFoundException ex) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ErroDTO.fromException(ex, HttpStatus.BAD_REQUEST.value()));
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.fromException(ex, HttpStatus.NOT_FOUND.value()));
     }
 
     /**
@@ -97,9 +101,9 @@ public class GlobalExceptionHandler {
      * @return Resposta com o status 500 e a mensagem de erro
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErroDTO> tratarExcecaoGenerica(Exception ex) {
+    public ResponseEntity<ErrorResponse> tratarExcecaoGenerica(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErroDTO.fromException(ex, HttpStatus.INTERNAL_SERVER_ERROR.value()));
+                .body(ErrorResponse.fromException(ex, HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 }
