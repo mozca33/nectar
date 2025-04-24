@@ -1,8 +1,8 @@
-# 💻 Sistema de Processamento de Pedidos
+## 💻 Sistema de Processamento de Pedidos
 
 Este projeto faz parte de um case técnico com o objetivo de identificar e corrigir bugs em um sistema legado de geração, envio e consulta de pedidos. O foco está em compreender, corrigir e melhorar a estrutura existente, respeitando as regras de negócio definidas.
 
-# ⚙️ Ambiente de Desenvolvimento Utilizado
+## ⚙️ Ambiente de Desenvolvimento Utilizado
 
 - **Java**: version 21.0.5.
 - **Spring Boot**: version 3.4.4.
@@ -10,7 +10,7 @@ Este projeto faz parte de um case técnico com o objetivo de identificar e corri
 - **IDE recomendada**: VS Code + Extensões.
 - **Ferramenta para teste de API**: Postman v11.42.3.
 
-# 🚀 Como Rodar o Projeto
+## 🚀 Como Rodar o Projeto
 
 1. Extraia o arquivo .zip ou clone o repositório.
 2. Importe o projeto em sua IDE de preferência (IntelliJ, Eclipse ou VS Code).
@@ -83,7 +83,7 @@ A lógica de processamento não valida corretamente o pedido, isto é, se os cam
 **Correção**:
 Foram feitas validações completas utilizando `@NotBlank` e `@Positive` garantindo que apenas pedidos válidos sejam processados. Agora, o sistema rejeita pedidos com os campos id, cliente nulos ou vazios e valorTotal negativo ou zerado.
 
-# 📗 Melhorias Implementadas
+## 📗 Melhorias Implementadas
 
 1. Refatoração da classe `PedidoController.java`:
    Seguiu-se as boas práticas REST, com uso de `ResponseEntity` para definir respostas mais claras e estruturadas. O retorno agora é tipado com um PedidoDTO.
@@ -103,7 +103,7 @@ Foram feitas validações completas utilizando `@NotBlank` e `@Positive` garanti
 6. Criação da classe `GlobalExceptionHandler.java`:
    Foi criada uma tratativa de exceções com a anotação `@RestControllerAdvice` para poder capturar e tratar exceções de forma global, centralizada e customizada, retornando respostas adequadas para cada exceção.
 
-# 📗 Melhorias Sugeridas (Não Implementadas)
+## 📗 Melhorias Sugeridas (Não Implementadas)
 
 1. Criar um arquivo de mensagens de erro para centralizar e padronizar todas as mensagens, ajudando na legibilidade, reutiilização e mantenibilidade (Ou futura internacionalização).
    
@@ -115,7 +115,7 @@ Foram feitas validações completas utilizando `@NotBlank` e `@Positive` garanti
 
 5. Implementar um processo de migração para corrigir pedidos existentes que possam estar inconsistentes no banco (com Id, cliente ou valorTotal inválidos).
 
-# 📌 Considerações finais
+## 📌 Considerações finais
 
 O sistema foi ajustado para seguir a regra de negócio e garantir integridade nos dados de pedidos. Os principais bugs foram corrigidos com foco em clareza e manutenção. O código foi refatorado de maneira a seguir melhores práticas, com o uso de DTOs, Validações de Campo, e a separação de responsabilidades em cada camada, garantindo que a aplicação seja fácil de entender e de manter no futuro.
 
