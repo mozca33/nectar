@@ -1,7 +1,6 @@
 package com.rafael.pedido.controller;
 
 import com.rafael.pedido.dto.PedidoDTO;
-import com.rafael.pedido.model.Pedido;
 import com.rafael.pedido.service.PedidoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,18 +46,36 @@ public class PedidoControllerTest {
      */
     @Test
     public void deveCriarPedido_quandoDadosValidos() throws Exception {
-        Pedido pedido = new Pedido("1", "Cliente", 100.0);
-        PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+        PedidoDTO pedidoDTO = new PedidoDTO("1", "Cliente", 10.0);
 
         when(service.criarPedido(any())).thenReturn(pedidoDTO);
 
         mockMvc.perform(post("/pedidos")
-                .content(objectMapper.writeValueAsString(pedido))
+                .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.cliente").value("Cliente"))
-                .andExpect(jsonPath("$.valorTotal").value("100.0"));
+                .andExpect(jsonPath("$.valorTotal").value("10.0"));
+    }
+
+    /**
+     * Testa a consulta de um pedido existente.
+     * Verifica se o status da resposta é 200 OK e se os dados do pedido estão
+     * corretos.
+     */
+    @Test
+    public void deveRetornarPedido_quandoPedidoExistente() throws Exception {
+        PedidoDTO pedidoDTO = new PedidoDTO("1", "Cliente", 500.0);
+
+        when(service.consultar("1")).thenReturn(pedidoDTO);
+
+        mockMvc.perform(get("/pedidos/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.cliente").value("Cliente"))
+                .andExpect(jsonPath("$.valorTotal").value("500.0"));
     }
 
     /**
@@ -67,8 +84,7 @@ public class PedidoControllerTest {
      */
     @Test
     public void deveRetornar400_quandoIdForNulo() throws Exception {
-        Pedido pedido = new Pedido(null, "Cliente", 100.0);
-        PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+        PedidoDTO pedidoDTO = new PedidoDTO(null, "Cliente", 1000.0);
 
         when(service.criarPedido(any())).thenThrow(new IllegalArgumentException());
 
@@ -85,10 +101,10 @@ public class PedidoControllerTest {
      */
     @Test
     void deveRetornar400_quandoClienteForVazio() throws Exception {
-        PedidoDTO dto = new PedidoDTO("1", "", 100.0);
+        PedidoDTO pedidoDTO = new PedidoDTO("1", "", 150.0);
 
         mockMvc.perform(post("/pedidos")
-                .content(objectMapper.writeValueAsString(dto))
+                .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -99,10 +115,10 @@ public class PedidoControllerTest {
      */
     @Test
     void deveRetornar400_quandoValorTotalForNegativo() throws Exception {
-        PedidoDTO dto = new PedidoDTO("1", "Cliente", -100.0);
+        PedidoDTO pedidoDTO = new PedidoDTO("1", "Cliente", -120.0);
 
         mockMvc.perform(post("/pedidos")
-                .content(objectMapper.writeValueAsString(dto))
+                .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -113,10 +129,10 @@ public class PedidoControllerTest {
      */
     @Test
     void deveRetornar400_quandoIdEClienteForemInvalidos() throws Exception {
-        PedidoDTO dto = new PedidoDTO("", "", 100.0);
+        PedidoDTO pedidoDTO = new PedidoDTO("", "", 200.0);
 
         mockMvc.perform(post("/pedidos")
-                .content(objectMapper.writeValueAsString(dto))
+                .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -127,10 +143,10 @@ public class PedidoControllerTest {
      */
     @Test
     void deveRetornar400_quandoClienteEValorTotalForemInvalidos() throws Exception {
-        PedidoDTO dto = new PedidoDTO("1", "", -5.0);
+        PedidoDTO pedidoDTO = new PedidoDTO("1", "", 0.0);
 
         mockMvc.perform(post("/pedidos")
-                .content(objectMapper.writeValueAsString(dto))
+                .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -141,10 +157,10 @@ public class PedidoControllerTest {
      */
     @Test
     void deveRetornar400_quandoTodosOsCamposForemInvalidos() throws Exception {
-        PedidoDTO dto = new PedidoDTO("", null, -1.0);
+        PedidoDTO pedidoDTO = new PedidoDTO("", null, -0.0);
 
         mockMvc.perform(post("/pedidos")
-                .content(objectMapper.writeValueAsString(dto))
+                .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
