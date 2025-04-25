@@ -35,7 +35,8 @@ public class GlobalHandlerExceptionTest {
 
     /**
      * Testa o tratamento de exceções de validação de handler.
-     * Verifica se o status da resposta é 400 Bad Request e se a mensagem de erro
+     * Verifica se o status da resposta é 400 Bad Request e se a mensagem
+     * de erro
      * está correta.
      */
     @Test
@@ -48,7 +49,7 @@ public class GlobalHandlerExceptionTest {
 
     /**
      * Testa o tratamento de exceções de recurso não encontrado.
-     * Verifica se o status da resposta é 404 Not Found e se a mensagem de erro
+     * Verifica se o status da resposta é 400 Not Found e se a mensagem de erro
      * está correta.
      */
     @Test
@@ -126,7 +127,7 @@ public class GlobalHandlerExceptionTest {
      * está correta.
      */
     @Test
-    void deveRetornar400_paraExcecaoDeValidacaoDeMetodo() throws Exception {
+    void deveRetornar422_paraExcecaoDeValidacaoDeMetodo() throws Exception {
         String jsonInvalido = """
                 {
                     "id": null,
@@ -138,7 +139,7 @@ public class GlobalHandlerExceptionTest {
         mockMvc.perform(post("/pedidos")
                 .content(jsonInvalido)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400));
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.status").value(422));
     }
 }

@@ -80,10 +80,10 @@ public class PedidoControllerTest {
 
     /**
      * Testa a consulta de um pedido inexistente.
-     * Verifica se o status da resposta é 404 Not Found.
+     * Verifica se o status da resposta é 422 Unprocessable Entity.
      */
     @Test
-    public void deveRetornar400_quandoIdForNulo() throws Exception {
+    public void deveRetornar422_quandoIdForNulo() throws Exception {
         PedidoDTO pedidoDTO = new PedidoDTO(null, "Cliente", 1000.0);
 
         when(service.criarPedido(any())).thenThrow(new IllegalArgumentException());
@@ -91,86 +91,90 @@ public class PedidoControllerTest {
         mockMvc.perform(post("/pedidos")
                 .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400));
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.status").value(422));
     }
 
     /**
      * Testa a criação de um pedido com ID inválido.
-     * Verifica se o status da resposta é 400 Bad Request.
+     * Verifica se o status da resposta é 422 Unprocessable Entity.
      */
     @Test
-    void deveRetornar400_quandoClienteForVazio() throws Exception {
+    void deveRetornar422_quandoClienteForVazio() throws Exception {
         PedidoDTO pedidoDTO = new PedidoDTO("1", "", 150.0);
 
         mockMvc.perform(post("/pedidos")
                 .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.status").value(422));
     }
 
     /**
      * Testa a criação de um pedido com valor total inválido.
-     * Verifica se o status da resposta é 400 Bad Request.
+     * Verifica se o status da resposta é 422 Unprocessable Entity.
      */
     @Test
-    void deveRetornar400_quandoValorTotalForNegativo() throws Exception {
+    void deveRetornar422_quandoValorTotalForNegativo() throws Exception {
         PedidoDTO pedidoDTO = new PedidoDTO("1", "Cliente", -120.0);
 
         mockMvc.perform(post("/pedidos")
                 .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.status").value(422));
     }
 
     /**
      * Testa a criação de um pedido com todos os campos inválidos.
-     * Verifica se o status da resposta é 400 Bad Request.
+     * Verifica se o status da resposta é 422 Unprocessable Entity.
      */
     @Test
-    void deveRetornar400_quandoIdEClienteForemInvalidos() throws Exception {
+    void deveRetornar422_quandoIdEClienteForemInvalidos() throws Exception {
         PedidoDTO pedidoDTO = new PedidoDTO("", "", 200.0);
 
         mockMvc.perform(post("/pedidos")
                 .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     /**
      * Testa a criação de um pedido com ID e valor total inválidos.
-     * Verifica se o status da resposta é 400 Bad Request.
+     * Verifica se o status da resposta é 422 Unprocessable Entity.
      */
     @Test
-    void deveRetornar400_quandoClienteEValorTotalForemInvalidos() throws Exception {
+    void deveRetornar422_quandoClienteEValorTotalForemInvalidos() throws Exception {
         PedidoDTO pedidoDTO = new PedidoDTO("1", "", 0.0);
 
         mockMvc.perform(post("/pedidos")
                 .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.status").value(422));
     }
 
     /**
      * Testa a criação de um pedido com cliente e valor total inválidos.
-     * Verifica se o status da resposta é 400 Bad Request.
+     * Verifica se o status da resposta é 422 Unprocessable Entity.
      */
     @Test
-    void deveRetornar400_quandoTodosOsCamposForemInvalidos() throws Exception {
+    void deveRetornar422_quandoTodosOsCamposForemInvalidos() throws Exception {
         PedidoDTO pedidoDTO = new PedidoDTO("", null, -0.0);
 
         mockMvc.perform(post("/pedidos")
                 .content(objectMapper.writeValueAsString(pedidoDTO))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.status").value(422));
     }
 
     /**
      * Testa a consulta de um pedido com ID inválido.
-     * Verifica se o status da resposta é 400 Bad Request.
+     * Verifica se o status da resposta é 422 Unprocessable Entity.
      */
     @Test
-    public void deveRetornar400_quandoIdForVazio() throws Exception {
+    public void deveRetornar422_quandoIdForVazio() throws Exception {
         when(service.consultar(" "))
                 .thenThrow(new NoSuchElementException("Pedido não encontrado com o ID informado"));
 
@@ -182,7 +186,7 @@ public class PedidoControllerTest {
 
     /**
      * Testa a consulta de um pedido com ID nulo.
-     * Verifica se o status da resposta é 400 Bad Request.
+     * Verifica se o status da resposta é 404 Not Found.
      */
     @Test
     public void deveRetornar404_quandoIdNaoExistir() throws Exception {
