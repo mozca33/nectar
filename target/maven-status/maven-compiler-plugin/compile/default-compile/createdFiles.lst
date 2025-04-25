@@ -1,6 +1,0 @@
-com\rafael\pedido\publisher\PedidoPublisher.class
-com\rafael\pedido\PedidoApp.class
-com\rafael\pedido\service\PedidoService.class
-com\rafael\pedido\controller\PedidoController.class
-com\rafael\pedido\repository\PedidoRepository.class
-com\rafael\pedido\model\Pedido.class
