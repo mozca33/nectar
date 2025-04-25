@@ -46,13 +46,13 @@ public class GlobalExceptionHandler {
      * Método que trata exceções de validação de método.
      *
      * @param ex a exceção lançada
-     * @return Resposta com o status 400 e a mensagem de erro
+     * @return Resposta com o status 422 e a mensagem de erro
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> tratarExcecaoDeValidacaoDeMetodo(MethodArgumentNotValidException ex) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponse.fromException(ex, HttpStatus.BAD_REQUEST.value()));
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(ErrorResponse.fromException(ex, HttpStatus.UNPROCESSABLE_ENTITY.value()));
     }
 
     /**
